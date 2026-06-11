@@ -1,0 +1,162 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Checkout</title>
+	<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f2f2f2;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            display: flex;
+            gap: 20px;
+        }
+
+        .form-box, .summary-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 5px gray;
+            width: 50%;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: green;
+            color: white;
+            border: none;
+            font-size: 16px;
+        }
+
+        .item {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+
+        img {
+            width: 60px;
+            height: 60px;
+        }
+
+        .total {
+            font-weight: bold;
+            font-size: 18px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Checkout</h1>
+
+    <div class="container">
+        
+        <div class="form-box">
+            <h3>Shipping Details</h3>
+            <form id="paymentForm">
+                
+                <input type="text" name="name" placeholder="Full Name" required>
+                
+                <textarea name="address" placeholder="Full Address" required></textarea>
+				<input type="hidden" id="totalAmount"
+				       th:value="${total}">
+                
+                <button type="button" onclick="payNow()">Pay Now</button>
+            </form>
+        </div>
+
+        <div class="summary-box">
+            <h3>Order Summary</h3>
+            
+            <div th:each="p : ${cart}" class="item">
+                <img th:src="@{'/uploads/' + ${p.imgName}}">
+                <span th:text="${p.name}"></span>
+                <span th:text="${p.price}"></span>
+            </div>
+            
+            <div class="total">
+                <span>Total: </span>
+				<span th:text="${total}"></span>
+            </div>
+        </div>
+
+    </div>
+	
+	<script>
+
+	function payNow() {
+
+	fetch("/create-order",{
+	method:"POST"
+	})
+	.then(response=>response.json())
+	.then(order=>{
+
+	var options = {
+
+	key:"rzp_test_SxeGhMMmCnf1b7",
+
+	amount:order.amount,
+
+	currency:order.currency,
+
+	name:"Ducat Ecommerce",
+
+	description:"Product Purchase",
+
+	order_id:order.id,
+
+	handler:function(response){
+
+	var form=document.createElement("form");
+
+	form.method="POST";
+	form.action="/place-order";
+
+	form.innerHTML=`
+
+	<input type="hidden" name="name"
+	value="${document.querySelector('[name=name]').value}">
+
+	<input type="hidden" name="address"
+	value="${document.querySelector('[name=address]').value}">
+
+	<input type="hidden" name="paymentId"
+	value="${response.razorpay_payment_id}">
+
+	<input type="hidden" name="razorOrderId"
+	value="${response.razorpay_order_id}">
+	`;
+
+	document.body.appendChild(form);
+
+	form.submit();
+	}
+	};
+
+	var rzp=new Razorpay(options);
+
+	rzp.open();
+
+	});
+	}
+
+	</script>
+
+</body>
+</html>

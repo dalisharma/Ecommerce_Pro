@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <title>Registration Page</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial,sans-serif;
+        }
+
+        body{
+
+            height:100vh;
+
+            background-image:url('/images/register.jpg');
+
+            background-size:cover;
+
+            background-position:center;
+
+            background-repeat:no-repeat;
+
+            display:flex;
+
+            justify-content:center;
+
+            align-items:center;
+        }
+
+        /* Overlay */
+
+        body::before{
+
+            content:"";
+
+            position:absolute;
+
+            width:100%;
+
+            height:100%;
+
+        }
+
+        /* Form Box */
+
+        form{
+
+            position:relative;
+
+            width:400px;
+
+            padding:40px;
+
+            background:rgba(255,255,255,0.12);
+
+            backdrop-filter:blur(12px);
+
+            border-radius:20px;
+
+            border:1px solid rgba(255,255,255,0.2);
+
+            box-shadow:0 0 25px rgba(0,0,0,0.5);
+
+            color:white;
+
+            animation:slideUp 0.8s ease;
+        }
+
+        h2{
+
+            text-align:center;
+
+            margin-bottom:30px;
+
+            font-size:32px;
+        }
+
+        .input-box{
+
+            margin-bottom:20px;
+        }
+
+        label{
+
+            display:block;
+
+            margin-bottom:8px;
+
+            font-size:15px;
+        }
+
+        input{
+
+            width:100%;
+
+            padding:14px;
+
+            border:none;
+
+            outline:none;
+
+            border-radius:10px;
+
+            background:rgba(255,255,255,0.2);
+
+            color:white;
+
+            font-size:15px;
+        }
+
+        input::placeholder{
+            color:#eee;
+        }
+
+        button{
+
+            width:100%;
+
+            padding:14px;
+
+            border:none;
+
+            border-radius:10px;
+
+            background:linear-gradient(to right,#ff512f,#dd2476);
+
+            color:white;
+
+            font-size:18px;
+
+            cursor:pointer;
+
+            transition:0.3s;
+        }
+
+        button:hover{
+
+            transform:scale(1.03);
+
+            box-shadow:0 0 15px rgba(255,255,255,0.4);
+        }
+
+        .login-link{
+
+            margin-top:20px;
+
+            text-align:center;
+        }
+
+        .login-link a{
+
+            color:yellow;
+
+            text-decoration:none;
+
+            font-weight:bold;
+        }
+
+        .login-link a:hover{
+            text-decoration:underline;
+        }
+
+        @keyframes slideUp{
+
+            from{
+                transform:translateY(100px);
+                opacity:0;
+            }
+
+            to{
+                transform:translateY(0);
+                opacity:1;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<form th:action="@{/register}" th:object="${user}" method="post">
+
+    <h2>Create Account</h2>
+
+    <div class="input-box">
+
+        <label>Username</label>
+
+        <input 
+            type="text"
+            th:field="*{username}"
+            placeholder="Enter Username"
+            required
+        >
+
+    </div>
+
+    <div class="input-box">
+
+        <label>Password</label>
+
+        <input 
+            type="password"
+            th:field="*{password}"
+            placeholder="Enter Password"
+            required
+        >
+
+    </div>
+
+    <button type="submit">
+        Register
+    </button>
+
+    <p th:text="${message}" style="color:yellow; margin-top:15px; text-align:center;">
+    </p>
+
+    <div class="login-link">
+
+        Already have an account?
+
+        <a th:href="@{/login}">
+            Login Here
+        </a>
+
+    </div>
+
+</form>
+
+</body>
+
+</html>

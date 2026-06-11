@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Success</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, sans-serif;
+        }
+
+        body{
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background:#f4f6f9;
+        }
+
+        .success-box{
+            background:white;
+            padding:40px;
+            border-radius:15px;
+            box-shadow:0 4px 15px rgba(0,0,0,0.1);
+            text-align:center;
+            width:450px;
+        }
+
+        .checkmark{
+            font-size:70px;
+            color:green;
+            margin-bottom:15px;
+        }
+
+        h1{
+            color:#28a745;
+            margin-bottom:10px;
+        }
+
+        p{
+            color:#555;
+            margin-bottom:25px;
+            line-height:1.6;
+        }
+
+        .btn{
+            display:inline-block;
+            text-decoration:none;
+            background:#007bff;
+            color:white;
+            padding:12px 25px;
+            border-radius:8px;
+            transition:0.3s;
+        }
+
+        .btn:hover{
+            background:#0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="success-box">
+        <div class="checkmark">✔</div>
+
+        <h1>Order Placed Successfully!</h1>
+
+        <p>
+            Thank you for shopping with us.<br>
+            Your order has been received and is being processed.
+        </p>
+
+        <a href="/home" class="btn">Continue Shopping</a>
+    </div>
+
+</body>
+</html>

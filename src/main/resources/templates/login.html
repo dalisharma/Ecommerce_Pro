@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial,sans-serif;
+        }
+
+        body{
+            height:100vh;
+            background-image:url('/images/login.jpg');
+            background-size:cover;
+            background-position:center;
+            background-repeat:no-repeat;
+
+            display:flex;
+            justify-content:center;
+            align-items:center;
+        }
+
+        body::before{
+            content:"";
+            position:absolute;
+            width:100%;
+            height:100%;
+            background:rgba(0,0,0,0.35);
+        }
+
+        form{
+            position:relative;
+            width:400px;
+            padding:40px;
+
+            background:rgba(255,255,255,0.12);
+            backdrop-filter:blur(12px);
+
+            border-radius:20px;
+            border:1px solid rgba(255,255,255,0.2);
+
+            box-shadow:0 0 25px rgba(0,0,0,0.5);
+
+            color:white;
+
+            animation:slideUp 0.8s ease;
+        }
+
+        h2{
+            text-align:center;
+            margin-bottom:30px;
+            font-size:32px;
+        }
+
+        .input-box{
+            margin-bottom:20px;
+        }
+
+        label{
+            display:block;
+            margin-bottom:8px;
+        }
+
+        input{
+            width:100%;
+            padding:14px;
+
+            border:none;
+            outline:none;
+
+            border-radius:10px;
+
+            background:rgba(255,255,255,0.2);
+
+            color:white;
+        }
+
+        input::placeholder{
+            color:#eee;
+        }
+
+        button{
+            width:100%;
+            padding:14px;
+
+            border:none;
+            border-radius:10px;
+
+            background:linear-gradient(to right,#ff512f,#dd2476);
+
+            color:white;
+            font-size:18px;
+
+            cursor:pointer;
+        }
+
+        .login-link{
+            margin-top:20px;
+            text-align:center;
+        }
+
+        .login-link a{
+            color:yellow;
+            text-decoration:none;
+            font-weight:bold;
+        }
+
+        .message{
+            color:yellow;
+            text-align:center;
+            margin-top:15px;
+        }
+
+        .error{
+            color:red;
+            text-align:center;
+            margin-top:15px;
+        }
+		.message{
+		    color: yellow;
+		    text-align: center;
+		    margin-top: 15px;
+		    font-weight: bold;
+		}
+
+        @keyframes slideUp{
+            from{
+                transform:translateY(100px);
+                opacity:0;
+            }
+            to{
+                transform:translateY(0);
+                opacity:1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<form th:action="@{/login}" method="post">
+
+    <h2>Login Account</h2>
+
+    <div class="input-box">
+        <label>Username</label>
+        <input type="text"
+               name="username"
+               placeholder="Enter Username"
+               required>
+    </div>
+	
+    <div class="input-box">
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Enter Password" required>
+    </div>
+	
+	<button type="submit">Login</button>
+
+	<p class="message"
+	   th:if="${message}"
+	   th:text="${message}">
+	</p>
+
+	<div class="login-link">
+	    Don't have an account?
+	    <a th:href="@{/register}">
+	        Register Here
+	    </a>
+	</div>
+</form>
+</body>
+</html>

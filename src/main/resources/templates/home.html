@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShopEase</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background-color: #f4f6f9;
+    }
+
+    /* ---------- NAVBAR ---------- */
+
+    .navbar {
+      width: 100%;
+      background-color: #111827;
+      padding: 18px 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+    }
+
+    .logo {
+      color: white;
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    .logo span {
+      color: orange;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-size: 18px;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+
+    .nav-links a:hover {
+      color: orange;
+    }
+
+    .login-btn {
+      background-color: orange;
+      padding: 10px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .login-btn:hover {
+      background-color: white;
+      color: black !important;
+    }
+
+    /* ---------- HERO SECTION ---------- */
+
+    .hero {
+      height: 90vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      flex-direction: column;
+
+      background:
+        linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+        url("https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1600&auto=format&fit=crop");
+
+      background-size: cover;
+      background-position: center;
+
+      color: white;
+    }
+
+    .hero h1 {
+      font-size: 65px;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 22px;
+      margin-bottom: 35px;
+      color: #ddd;
+    }
+
+    /* ---------- SEARCH ---------- */
+
+    .search-box {
+      width: 700px;
+      background-color: white;
+      padding: 10px;
+      border-radius: 50px;
+
+      display: flex;
+      align-items: center;
+    }
+
+    .search-box input {
+      flex: 1;
+      padding: 15px;
+      border: none;
+      outline: none;
+      font-size: 17px;
+    }
+
+    .search-box button {
+      padding: 15px 30px;
+      border: none;
+      border-radius: 50px;
+      background-color: orange;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    /* ---------- PRODUCTS ---------- */
+
+    .products {
+      padding: 80px 60px;
+    }
+
+    .products h2 {
+      text-align: center;
+      font-size: 40px;
+      margin-bottom: 50px;
+      color: #111827;
+    }
+
+    .product-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 35px;
+    }
+
+    .card {
+      width: 280px;
+      background-color: white;
+      border-radius: 15px;
+      overflow: hidden;
+
+      transition: 0.3s;
+
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .card img {
+      width: 100%;
+      height: 120px;
+      object-fit: contain;
+    }
+
+    .card-content {
+      padding: 20px;
+    }
+
+    .card-content h3 {
+      margin-bottom: 10px;
+      color: #111827;
+    }
+
+    .price {
+      color: orange;
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .card-content p {
+      color: gray;
+      margin-bottom: 20px;
+    }
+
+	.add-btn {
+	            width: 100%;
+	            padding: 12px;
+	            display: inline-block;
+	            text-align: center;
+	            text-decoration: none;
+	            border: none;
+	            background-color: #111827;
+	            color: white;
+	            border-radius: 8px;
+	            cursor: pointer;
+	            font-size: 16px;
+	        }
+
+	        .add-btn:hover {
+	            background-color: orange;
+	        }
+
+    /* ---------- FEATURES ---------- */
+
+    .features {
+      padding: 70px 60px;
+      background-color: white;
+
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .feature-box {
+      width: 300px;
+      text-align: center;
+      padding: 30px;
+      border-radius: 12px;
+      background-color: #f9fafb;
+
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+    }
+
+    .feature-box h3 {
+      margin-bottom: 15px;
+      color: #111827;
+    }
+
+    .feature-box p {
+      color: gray;
+    }
+
+    /* ---------- FOOTER ---------- */
+
+    .footer {
+      background-color: #111827;
+      color: white;
+      text-align: center;
+      padding: 25px;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+
+    @media(max-width:768px) {
+
+      .navbar {
+        padding: 20px;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .hero h1 {
+        font-size: 40px;
+      }
+
+      .search-box {
+        width: 90%;
+      }
+
+      .products {
+        padding: 50px 20px;
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <!-- ---------- NAVBAR ---------- -->
+
+  <div class="navbar">
+
+    <div class="logo">
+      Shop<span>Ease</span>
+    </div>
+
+    <div class="nav-links">
+
+      <!-- thymeleaf links -->
+
+      <a th:href="@{/home}">Home</a>
+
+      <a th:href="@{/products}">Products</a>
+
+      <a th:href="@{/cart}">Cart</a>
+
+      <!--<a th:href="@{/about}">About</a> -->
+
+      <!-- LOGIN -->
+
+      <a th:if="${session.user == null}" th:href="@{/login}" class="login-btn">
+        Login
+      </a>
+	  <a th:href="@{/logout}" class="login-btn" style="border-radius: 50%;">
+	          LOut
+	        </a>
+    </div>
+
+  </div>
+
+  <!-- ---------- HERO SECTION ---------- -->
+
+  <div class="hero">
+
+    <h1>Discover Amazing Products</h1>
+
+    <p>Best Quality Products With Fast Delivery</p>
+
+    <!-- SEARCH FORM -->
+
+    <form th:action="@{/search}" method="get" class="search-box">
+
+      <input type="text" name="keyword" placeholder="Search for products...">
+
+      <button type="submit">Search</button>
+
+    </form>
+
+  </div>
+
+  <!-- ---------- PRODUCTS ---------- -->
+
+  <div class="products">
+
+    <h2>Trending Products</h2>
+
+    <div class="product-container">
+
+      <!-- DATABASE PRODUCTS -->
+
+      <div th:each="p : ${products}" class="card" >
+
+        <!-- image -->
+
+        <img th:src="@{'/uploads/' + ${p.imgName}}" alt="Product Image">
+
+        <div class="card-content">
+
+          <!-- product name -->
+
+          <h3 th:text="${p.name}"></h3>
+
+          <!-- product price -->
+
+          <div class="price">
+              <span th:text="${p.price}"></span>
+          </div>
+
+          <!-- description -->
+
+          <p th:text="${p.description}"></p>
+
+          <!-- product details -->
+
+          <a th:href="@{/add-to-cart/{id}(id=${p.id})}" class="add-btn">
+				Add to cart
+          </a>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ---------- FEATURES ---------- -->
+
+  <div class="features">
+
+    <div class="feature-box">
+      <h3>Fast Delivery</h3>
+      <p>Get your products delivered quickly at your doorstep.</p>
+    </div>
+
+    <div class="feature-box">
+      <h3>Secure Payment</h3>
+      <p>100% secure payment methods for safe shopping.</p>
+    </div>
+
+    <div class="feature-box">
+      <h3>Best Quality</h3>
+      <p>Premium quality products at affordable prices.</p>
+    </div>
+
+  </div>
+
+  <!-- ---------- FOOTER ---------- -->
+
+  <div class="footer">
+    <p>ShopEase | All Rights Reserved</p>
+  </div>
+
+</body>
+
+</html>

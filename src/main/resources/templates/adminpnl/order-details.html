@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Order Details</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            background: #f3f4f6;
+        }
+
+		.sidebar {
+		            width: 250px;
+		            height: 100vh;
+		            background: linear-gradient(#111827,rgb(57, 81, 130));
+		            padding: 20px;
+					position: fixed;
+					top: 0;
+					left: 0;
+					overflow-y: auto;
+		        }
+
+		        .logo {
+		            color: white;
+		            font-size: 28px;
+		            text-align: center;
+		            margin-bottom: 40px;
+		            font-weight: bold;
+		            background: #2563eb;
+		            padding: 25px;
+		            border-radius: 25px;
+		        }
+
+		        .sidebar a {
+		            display: block;
+		            color: white;
+		            text-decoration: none;
+		            padding: 18px;
+		            margin-bottom: 20px;
+		            border-radius: 8px;
+		            display: flex;
+		            justify-content: center;
+		            align-items: center;
+					background-color: #2563eb;
+		        }
+
+		        .sidebar a:hover {
+		            background: rgb(18, 77, 199);
+		        }
+
+		        .logout-btn {
+		            width: 100%;
+		            padding: 20px;
+		            border: none;
+		            border-radius: 8px;
+		            background: #dc2626;
+		            color: white;
+		            cursor: pointer;
+		            font-size: 15px;
+		            margin-top: 35px;
+		        }
+
+        .main {
+            flex: 1;
+            margin-left: 250px;
+            padding: 30px;
+        }
+
+        .navbar {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+			
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			
+        }
+		.navbar a {
+		            background: #2563eb;
+		            color: white;
+		            padding: 10px 20px;
+		            border-radius: 8px;
+		            text-decoration: none;
+		        }
+
+		        .back-btn:hover {
+		            background: #1d4ed8;
+		        }		
+
+        .details-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .details-card h2 {
+            color: #2563eb;
+            margin-bottom: 20px;
+        }
+
+        .info-row {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .info-row strong {
+            color: #111827;
+            display: inline-block;
+            width: 180px;
+        }
+
+        .table-container {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #2563eb;
+            color: white;
+            padding: 12px;
+        }
+
+        td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+
+        <div class="logo">ShopEase Admin</div>
+
+        <a th:href="@{/admin}">Dashboard</a>
+        <a th:href="@{/adminpnl/products}">Products</a>
+        <a th:href="@{/adminpnl/orders}">Orders</a>
+        <a th:href="@{/adminpnl/users}">Users</a>
+
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="logout-btn">
+                Logout
+            </button>
+        </form>
+
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+
+        <div class="navbar">
+            <h1>Order Details</h1>
+			<a th:href="@{/adminpnl/orders}" class="back-btn">
+			                Back to Orders
+			            </a>			
+        </div>
+
+        <!-- Order Information -->
+        <div class="details-card">
+
+            <h2>Customer Information</h2>
+
+            <div class="info-row">
+                <strong>Customer Name :</strong>
+                <span th:text="${order.customerName}"></span>
+            </div>
+
+            <div class="info-row">
+                <strong>Delivery Address :</strong>
+                <span th:text="${order.address}"></span>
+            </div>
+
+            <div class="info-row">
+                <strong>Total Amount :</strong>
+                 <span th:text="${order.totalAmount}"></span>
+            </div>
+
+            <div class="info-row">
+                <strong>Status :</strong>
+                <span th:text="${order.status}"></span>
+            </div>
+
+        </div>
+
+        <!-- Products Table -->
+        <div class="table-container">
+
+            <h2 style="margin-bottom:15px;">Ordered Products</h2>
+
+            <table>
+
+                <tr>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Subtotal</th>
+                </tr>
+
+                <tr th:each="item : ${order.items}">
+
+                    <td th:text="${item.productName}"></td>
+
+                    <td>
+                        <span th:text="${item.price}"></span>
+                    </td>
+
+                    <td th:text="${item.quantity}"></td>
+
+                    <td>
+                        <span th:text="${item.price * item.quantity}"></span>
+                    </td>
+
+                </tr>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
