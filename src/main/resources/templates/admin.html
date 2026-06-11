@@ -10,7 +10,6 @@
             padding: 0;
             box-sizing: border-box;
             font-family: Arial, sans-serif;
-			color: white;
         }
 
         body {
@@ -110,16 +109,26 @@
             text-align: center;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             transition: 0.3s;
+            border: none;
+            cursor: pointer;
+            width: 100%;
         }
 
-        .card:hover {
+        .card:hover,
+        .card:focus {
             transform: translateY(-5px);
+            outline: 2px solid #2563eb;
+            outline-offset: 3px;
         }
 
         .card h2 {
             font-size: 35px;
             margin-bottom: 10px;
             color: #2563eb;
+        }
+
+        .card p {
+            color: #111827;
         }
 
         .table-section {
@@ -150,6 +159,7 @@
         td {
             padding: 12px;
             border-bottom: 1px solid #ddd;
+            color: #111827;
         }
 
         tr:hover {
@@ -160,6 +170,76 @@
             text-align: center;
             color: #666;
             padding: 20px;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(17, 24, 39, 0.65);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            z-index: 10;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 12px;
+            max-height: 85vh;
+            max-width: 1000px;
+            overflow: hidden;
+            width: 100%;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+        }
+
+        .modal-header {
+            align-items: center;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            padding: 18px 22px;
+        }
+
+        .modal-header h2 {
+            color: #111827;
+            font-size: 24px;
+        }
+
+        .modal-close {
+            background: #dc2626;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 18px;
+            line-height: 1;
+            padding: 8px 12px;
+        }
+
+        .modal-body {
+            max-height: calc(85vh - 70px);
+            overflow: auto;
+            padding: 20px 22px 24px;
+        }
+
+        .modal-body table {
+            min-width: 720px;
+        }
+
+        .modal-body img {
+            border-radius: 6px;
+            height: 54px;
+            object-fit: contain;
+            width: 54px;
+        }
+
+        .description-cell {
+            max-width: 260px;
         }
 
         @media (max-width: 768px) {
@@ -177,8 +257,17 @@
                 flex-direction: column;
                 gap: 10px;
             }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .modal-overlay {
+                padding: 12px;
+            }
         }
     </style>
+    <link rel="stylesheet" th:href="@{/css/modern.css}">
 </head>
 
 <body>
@@ -207,22 +296,22 @@
         </div>
         <!-- Stats Cards -->
         <div class="cards">
-            <div class="card">
+            <button type="button" class="card" data-modal-target="productsModal">
                 <h2 th:text="${totalProducts}">0</h2>
                 <p>Total Products</p>
-            </div>
-            <div class="card">
+            </button>
+            <button type="button" class="card" data-modal-target="ordersModal">
                 <h2 th:text="${totalOrders}">0</h2>
 				<p>Total Orders</p>
-            </div>
-            <div class="card">
+            </button>
+            <button type="button" class="card" data-modal-target="usersModal">
                 <h2 th:text="${totalUsers}">0</h2>
                 <p>Total Users</p>
-            </div>
-            <div class="card">
+            </button>
+            <button type="button" class="card" data-modal-target="revenueModal">
                 <h2> <span th:text="${revenue}">0</span></h2>
                 <p>Total Revenue</p>
-            </div>
+            </button>
         </div>
         <!-- Recent Orders -->
         <div class="table-section">
@@ -256,6 +345,183 @@
             </div>
         </div>
     </div>
+
+    <div class="modal-overlay" id="productsModal">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="productsModalTitle">
+            <div class="modal-header">
+                <h2 id="productsModalTitle">All Products</h2>
+                <button type="button" class="modal-close" data-modal-close>&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="product : ${allProducts}">
+                                <td th:text="${product.id}"></td>
+                                <td>
+                                    <img th:src="@{'/uploads/' + ${product.imgName}}" alt="Product Image">
+                                </td>
+                                <td th:text="${product.name}"></td>
+                                <td th:text="${product.price}"></td>
+                                <td class="description-cell" th:text="${product.description}"></td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(allProducts)}">
+                                <td colspan="5" class="empty-row">No Products Available</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="ordersModal">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="ordersModalTitle">
+            <div class="modal-header">
+                <h2 id="ordersModalTitle">All Orders</h2>
+                <button type="button" class="modal-close" data-modal-close>&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Address</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Payment ID</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="order : ${allOrders}">
+                                <td th:text="${order.id}"></td>
+                                <td th:text="${order.customerName}"></td>
+                                <td th:text="${order.address}"></td>
+                                <td th:text="${order.totalAmount}"></td>
+                                <td th:text="${order.status}"></td>
+                                <td th:text="${order.razorpayPaymentId}"></td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(allOrders)}">
+                                <td colspan="6" class="empty-row">No Orders Available</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="usersModal">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="usersModalTitle">
+            <div class="modal-header">
+                <h2 id="usersModalTitle">All Users</h2>
+                <button type="button" class="modal-close" data-modal-close>&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Role</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="user : ${allUsers}">
+                                <td th:text="${user.id}"></td>
+                                <td th:text="${user.username}"></td>
+                                <td th:text="${user.role}"></td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(allUsers)}">
+                                <td colspan="3" class="empty-row">No Users Found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="revenueModal">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="revenueModalTitle">
+            <div class="modal-header">
+                <h2 id="revenueModalTitle">Revenue Details</h2>
+                <button type="button" class="modal-close" data-modal-close>&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="order : ${allOrders}">
+                                <td th:text="${order.id}"></td>
+                                <td th:text="${order.customerName}"></td>
+                                <td th:text="${order.totalAmount}"></td>
+                                <td th:text="${order.status}"></td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(allOrders)}">
+                                <td colspan="4" class="empty-row">No Revenue Available</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const openModal = (modalId) => {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('active');
+            }
+        };
+
+        const closeModal = (modal) => {
+            modal.classList.remove('active');
+        };
+
+        document.querySelectorAll('[data-modal-target]').forEach((card) => {
+            card.addEventListener('click', () => openModal(card.dataset.modalTarget));
+        });
+
+        document.querySelectorAll('[data-modal-close]').forEach((button) => {
+            button.addEventListener('click', () => closeModal(button.closest('.modal-overlay')));
+        });
+
+        document.querySelectorAll('.modal-overlay').forEach((overlay) => {
+            overlay.addEventListener('click', (event) => {
+                if (event.target === overlay) {
+                    closeModal(overlay);
+                }
+            });
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                document.querySelectorAll('.modal-overlay.active').forEach(closeModal);
+            }
+        });
+    </script>
 </body>
 
 </html>

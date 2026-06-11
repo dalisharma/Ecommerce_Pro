@@ -42,21 +42,26 @@ public class AdminController {
 	
 	@GetMapping("/admin")
 	public String dashboard(Model model) {
+		List<Product> products = repo.findAll();
+		List<Order> allOrders = orepo.findAll();
+		
 		model.addAttribute("totalProducts",repo.count());
 		
 		model.addAttribute("totalUsers",urepo.count());
 		
 		model.addAttribute("totalOrders",orepo.count());
 		
-		Double revenue=orepo.findAll()
+		Double revenue=allOrders
 				.stream()
 				.mapToDouble(Order::getTotalAmount)
 				.sum();
 		model.addAttribute("revenue",revenue);
 		
-		List<Order> orders=orepo.findAll();
-		List<Order> toporder=orders.stream().limit(5).toList();
+		List<Order> toporder=allOrders.stream().limit(5).toList();
 		model.addAttribute("orders",toporder);
+		model.addAttribute("allProducts",products);
+		model.addAttribute("allOrders",allOrders);
+		model.addAttribute("allUsers",urepo.findAll());
 		return "admin";
 	}
 	//open form
