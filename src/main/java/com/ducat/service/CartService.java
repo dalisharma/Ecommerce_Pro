@@ -10,6 +10,7 @@ import com.ducat.entity.Product;
 @Service
 public class CartService {
 	private List<Product> cart=new ArrayList<>();
+	
 	public void addToCart(Product product) {
 		cart.add(product);
 	}
